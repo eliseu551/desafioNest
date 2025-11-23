@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  pets         Pet[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Pet {
+  id           Int          @id @default(autoincrement())
+  name         String
+  species      String
+  age          Int?
+  weight       Float?
+  observations String?
+  ownerId      Int
+  owner        User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Appointment {
+  id           Int                @id @default(autoincrement())
+  date         DateTime
+  service      String
+  observations String?
+  status       AppointmentStatus  @default(SCHEDULED)
+  petId        Int
+  pet          Pet                @relation(fields: [petId], references: [id], onDelete: Cascade)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([date])
+  @@index([service])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}

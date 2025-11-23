@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: petcare-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petcare
+      MYSQL_USER: petuser
+      MYSQL_PASSWORD: petpass
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h localhost -uroot -proot']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: petcare-api
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: mysql://petuser:petpass@db:3306/petcare
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    command: ['npm', 'run', 'start:prod']
+
+volumes:
+  mysql-data:
