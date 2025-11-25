@@ -20,11 +20,23 @@ async function bootstrap() {
     .setTitle('Petcare API')
     .setDescription('API para gestão de usuários, pets e agendamentos')
     .setVersion('1.0.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Insira o token JWT com o prefixo Bearer',
+      },
+      'bearer',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') || 3000;

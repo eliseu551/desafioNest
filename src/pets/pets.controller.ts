@@ -17,7 +17,7 @@ import { UpdatePetDto } from './dto/update-pet.dto';
 import { PetsService } from './pets.service';
 
 @ApiTags('pets')
-@ApiBearerAuth()
+@ApiBearerAuth('bearer')
 @UseGuards(JwtAuthGuard)
 @Controller('pets')
 export class PetsController {

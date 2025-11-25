@@ -21,7 +21,7 @@ import { ListAppointmentsDto } from './dto/list-appointments.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 
 @ApiTags('appointments')
-@ApiBearerAuth()
+@ApiBearerAuth('bearer')
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(AuditInterceptor)
 @Controller('appointments')
