@@ -30,6 +30,9 @@ docker-compose up --build
 - A API sobe em `http://localhost:3000` (endpoints em `/api/*`).
 - Swagger: `http://localhost:3000/docs`.
 - Banco MySQL exposto em `localhost:3306` (user `petuser`, senha `petpass`, DB `petcare`).
+- Caso as apis não estejam funcionando rode o comando "npx prisma migrate dev --name init" em um novo terminal.
+
+
 
 ### Rodando localmente (sem Docker)
 1) Suba um MySQL local (ou use Docker apenas para o banco) e ajuste `DATABASE_URL`.
